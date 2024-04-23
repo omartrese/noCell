@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Teacher : MonoBehaviour
 {
+    private int currentTargetIndex = 0;
     [SerializeField]
     private float speed;
+    public Player playerScript;
     public GameObject[] targets;
-    private int currentTargetIndex = 0;
+    
 
     void Update()
     {
+        if(playerScript.gameEnd) { return; }
+
         if (currentTargetIndex < targets.Length)
         {
             GameObject currentTarget = targets[currentTargetIndex];
@@ -30,5 +34,35 @@ public class Teacher : MonoBehaviour
                 currentTargetIndex++;
             }
         } else currentTargetIndex = 0;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "playerZone")
+        {
+            if (playerScript.usingCell)
+            {
+                Debug.LogWarning("el hijo de puta de tu alumno retrasado está usando el movil, quitaselo");
+                playerScript.usingCell = false;
+                playerScript.gameEnd = true;
+                return;
+            }
+            Debug.LogWarning("Has pasado por la zona del alumno. Que buen profe (mentira)");
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "playerZone")
+        {
+            if (playerScript.usingCell)
+            {
+                Debug.LogWarning("el hijo de puta de tu alumno retrasado está usando el movil, quitaselo");
+                playerScript.usingCell = false;
+                playerScript.gameEnd = true;
+                return;
+            }
+            Debug.LogWarning("Has pasado por la zona del alumno. Que buen profe (mentira)");
+        }
     }
 }
